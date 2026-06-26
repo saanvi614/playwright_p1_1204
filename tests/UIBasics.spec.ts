@@ -36,8 +36,8 @@ test('Page playwright test', async ({ page }) => {
     //     //await page.locator('#username').fill('rahulshettyacademy2');
     //     await page.getByRole('textbox', { name: 'Username:' }).fill('rahulshettyacademy11221');
     //    // page.getByRole('textbox', { name: 'Username:' }).fill('gfg');
-    //   l̥  await page.getByRole('textbox', { name: 'Password:' }).fill('Learning@830$3mK2');
-    // //    await page.locator('#password').fill('Learning@830$3mK2');
+    //   l̥  await page.getByRole('textbox', { name: 'Password:' }).fill('paswrrod');
+    // //    await page.locator('#password').fill('pass1234');
 
     await userName.fill(process.env.RAHUL_USERNAME || '');
     await password.fill(process.env.RAHUL_PASSWORD || '');
