@@ -65,28 +65,11 @@ test('Page playwright test', async ({ page }) => {
     console.log(allProducts);
 });
 
-test.only('UI Controls- playwright test', async ({ page }) => {
+test('UI Controls- playwright test', async ({ page }) => {
     await page.goto('https://rahulshettyacademy.com/loginpagePractise/');
 
     const userName = page.getByRole('textbox', { name: 'Username:' });
 
-    //dropdown
-    const dropdown = page.locator('select.form-control');
-    await dropdown.selectOption('consult');
-    await expect(dropdown).toHaveValue('consult');
-    console.log((await dropdown.allTextContents()));
-
-    //--------------------------------------------
-    // Define radio button locator
-    const radioButtons = page.locator("input[type='radio']");
-    // Click on the second radio button
-    await radioButtons.nth(1).click();
-    await page.locator('#okayBtn').click(); // Click the "Okay" button in the alert
-    // Verify the selection
-    await expect(radioButtons.nth(1)).toBeChecked();
-    console.log("Selected radio button value True/False: " + await radioButtons.nth(1).isChecked());
-    console.log("Selected radio button value: " + await radioButtons.nth(1).getAttribute('value'));
-    //--------------------------------------------
     // Define checkbox locator
     const checkbox = page.locator('#terms');
     await page.pause();
@@ -106,6 +89,91 @@ test.only('UI Controls- playwright test', async ({ page }) => {
     console.log('title is:- '+ await page.title());
 
     await page.pause();
-   // const documentLink=page.locator('a:has-text("Document")');
+   const documentLink=page.locator('a:has-text("Document")');
     //await documentLink.click();
+    await documentLink.click({ button: 'right' });
+});
+
+test('Select Dropdowns', async ({ page }) => {
+    await page.goto('https://rahulshettyacademy.com/loginpagePractise/');
+
+    const userName = page.getByRole('textbox', { name: 'Username:' });
+
+    //dropdown
+    const dropdown = page.locator('select.form-control');
+    //await dropdown.selectOption('consult');
+    await dropdown.selectOption({ label: 'Consultant' });  //text
+    await dropdown.selectOption({ value: 'consult' });
+    await dropdown.selectOption({ index: 1 });
+
+    await expect(dropdown).toHaveValue('consult');
+    console.log((await dropdown.allTextContents()));
+
+    const allOptions= await dropdown.locator('option').allTextContents();
+    console.log(allOptions);
+
+    const allOptions1=await page.$$('select.form-control option');
+    console.log(allOptions1.length);
+
+    for(const e of allOptions1)
+    {
+      const text=await e.textContent();
+      console.log(text);
+    }
+
+});
+
+test('Radio Button Validations', async ({ page }) => {
+    await page.goto('https://rahulshettyacademy.com/loginpagePractise/');
+
+    const userName = page.getByRole('textbox', { name: 'Username:' });
+
+    // Define radio button locator
+    const radioButtons = page.locator("input[type='radio']");
+   
+    // Click on the second radio button
+    //await radioButtons.nth(1).click(); // Click the second radio button //both methods do same work
+
+    await radioButtons.nth(1).setChecked(true); // Set the second radio button as checked
+    
+    await page.locator('#okayBtn').click(); // Click the "Okay" button in the alert
+    
+    // Verify the selection
+    await expect(radioButtons.nth(1)).toBeChecked();
+    console.log("Selected radio button value True/False: " + await radioButtons.nth(1).isChecked());
+    console.log("Selected radio button value: " + await radioButtons.nth(1).getAttribute('value'));
+
+    console.log('title is:- '+ await page.title());
+
+    await page.pause();
+});
+
+test('Check Box Validations', async ({ page }) => {
+    await page.goto('https://rahulshettyacademy.com/loginpagePractise/');
+
+    const userName = page.getByRole('textbox', { name: 'Username:' });
+
+    //--------------------------------------------
+    // Define checkbox locator
+    const checkbox = page.locator('#terms');
+   
+    // Check the checkbox
+      //check() method will check the checkbox if it's not already checked,
+    //  and do nothisng if it is already checked.
+    //await checkbox.check(); 
+
+    await checkbox.setChecked(true); // Set the checkbox as checked
+    
+    await expect(checkbox).toBeChecked(); // Alternative assertion
+    console.log("Now Checkbox is checked or not: " + await checkbox.isChecked());
+
+    // Uncheck the checkbox
+    await checkbox.uncheck();
+    await expect(checkbox).not.toBeChecked(); // Alternative assertion
+    expect(await checkbox.isChecked()).toBeFalsy(); // Alternative assertion
+    console.log("Now Checkbox is checked or not: " + await checkbox.isChecked());
+
+    console.log('title is:- '+ await page.title());
+
+    await page.pause();
 });
