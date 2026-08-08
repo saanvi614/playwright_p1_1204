@@ -21,10 +21,12 @@ export default defineConfig({
   fullyParallel: true,
   retries: 1,
   use: {
-
+    video:'on-first-retry',
     browserName: 'chromium',
-    headless : true,
+    headless : false,
     trace: 'on-first-retry',
+    launchOptions: {
+      slowMo: 5000, }
   },
   reporter: 'html',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
